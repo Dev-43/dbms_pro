@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fleet Manager — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Fleet Manager — base theme (reference: BoxCars look). FROZEN: edit only via DESIGN.md ===== */
+:root {
+  --bg: #f5f7fc;
+  --surface: #ffffff;
+  --border: #e6e9f2;
+  --text: #050b20;
+  --muted: #5e6a85;
+  --primary: #405ff2;
+  --primary-hover: #2f49c9;
+  --primary-soft: #e9edff;
+  --dark: #0f1b3d;
+  --success: #1f8a4c;
+  --success-soft: #e2f5ea;
+  --warning: #b86a08;
+  --warning-soft: #fdf0d9;
+  --danger: #c0392b;
+  --danger-soft: #fce8e5;
+  --neutral-soft: #eef0f6;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 999px;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+  --font: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --sidebar-w: 230px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1 { font-size: 26px; font-weight: 700; margin: 0; }
+h2 { font-size: 18px; font-weight: 700; margin: 0 0 var(--s3); }
+
+/* Layout */
+.app-shell { display: flex; min-height: 100vh; }
+.sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); padding: var(--s5) var(--s4); display: flex; flex-direction: column; gap: var(--s1); }
+.sidebar .brand { font-weight: 700; font-size: 17px; letter-spacing: .06em; color: var(--text); margin-bottom: var(--s5); padding: 0 var(--s3); }
+.sidebar a { display: block; padding: var(--s3); border-radius: var(--radius-sm); color: var(--muted); font-weight: 500; }
+.sidebar a:hover { background: var(--neutral-soft); color: var(--text); text-decoration: none; }
+.sidebar a.active { background: var(--primary-soft); color: var(--primary); font-weight: 700; }
+.sidebar .spacer { flex: 1; }
+.main { flex: 1; padding: var(--s6); max-width: 1240px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s5); }
+
+/* Card */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--s5); margin-bottom: var(--s5); }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--s4); margin-bottom: var(--s5); }
+.stat-grid .card { margin-bottom: 0; }
+.stat .label { color: var(--muted); font-size: 13px; }
+.stat .value { font-size: 30px; font-weight: 700; }
+
+/* Buttons (pill, like the reference search button) */
+.btn { display: inline-block; padding: 10px var(--s5); border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.btn:hover { background: var(--neutral-soft); text-decoration: none; }
+.btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-danger:hover { background: #a22e22; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Tabs (like "In Stock / New Cars / Used Cars") */
+.tabs { display: flex; gap: var(--s5); border-bottom: 1px solid var(--border); margin-bottom: var(--s5); }
+.tab { padding: var(--s2) 0 var(--s3); color: var(--muted); font-weight: 600; border-bottom: 2px solid transparent; }
+.tab:hover { color: var(--text); text-decoration: none; }
+.tab.active { color: var(--text); border-bottom-color: var(--primary); }
+
+/* Table */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 12px; font-weight: 700; color: var(--muted); background: var(--bg); padding: var(--s3) var(--s4); border-bottom: 1px solid var(--border); }
+.table td { padding: var(--s3) var(--s4); border-bottom: 1px solid var(--border); }
+.table tr:last-child td { border-bottom: none; }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.empty { text-align: center; color: var(--muted); padding: var(--s5); }
+
+/* Vehicle cards (like "Explore All Vehicles") */
+.vehicle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--s5); }
+.vehicle-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.vehicle-img { position: relative; height: 140px; background: linear-gradient(135deg, #cfd8f6, #a9b8ee); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 18px; }
+.vehicle-img .badge { position: absolute; top: var(--s3); left: var(--s3); }
+.vehicle-body { padding: var(--s4); }
+.vehicle-title { font-weight: 700; font-size: 15px; }
+.vehicle-sub { color: var(--muted); font-size: 12px; margin-bottom: var(--s3); }
+.spec-row { display: flex; justify-content: space-between; gap: var(--s2); padding: var(--s3) 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+.vehicle-foot { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s3); }
+.price { font-size: 17px; font-weight: 700; }
+.price small { color: var(--muted); font-weight: 500; font-size: 12px; }
+
+/* Forms */
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
+.field { display: flex; flex-direction: column; gap: var(--s1); }
+.field label { font-weight: 600; font-size: 13px; }
+.field input, .field select, .field textarea { font: inherit; padding: 10px var(--s4); border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 3px solid var(--primary-soft); border-color: var(--primary); }
+.field .hint { color: var(--muted); font-size: 12px; }
+.form-actions { display: flex; gap: var(--s3); margin-top: var(--s5); }
+.filters { display: flex; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }
+
+/* Alerts */
+.alert { padding: var(--s3) var(--s4); border-radius: var(--radius-sm); margin-bottom: var(--s4); border: 1px solid; }
+.alert-error { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+.alert-success { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+
+/* Status badges */
+.badge { display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; }
+.badge-success { background: var(--success-soft); color: var(--success); }
+.badge-primary { background: var(--primary-soft); color: var(--primary); }
+.badge-warning { background: var(--warning-soft); color: var(--warning); }
+.badge-danger  { background: var(--danger-soft);  color: var(--danger); }
+.badge-neutral { background: var(--neutral-soft); color: var(--muted); }
+
+/* Login (dark hero-style backdrop like the reference header) */
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, #0f1b3d 0%, #27407f 55%, #405ff2 100%); }
+.login-card { width: 380px; border-radius: 20px; padding: var(--s6); }
+.login-card .brand { font-weight: 700; letter-spacing: .06em; margin-bottom: var(--s2); }
+.login-card .sub { color: var(--muted); margin-bottom: var(--s5); }
+.login-card .field + .field { margin-top: var(--s3); }
+.login-card .btn { display: block; width: 100%; text-align: center; margin-top: var(--s4); }
+
+@media (max-width: 800px) {
+  .app-shell { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .main { padding: var(--s4); }
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); color-scheme: light; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+[hidden] { display: none !important; }
+.note { color: var(--muted); font-size: 12px; margin-top: var(--s3); }
+</style>
+</head>
+<body>
+<div class="login-wrap" id="loginView">
+  <div class="card login-card">
+    <div class="brand">FLEET MANAGER</div>
+    <h2>Staff Login</h2>
+    <div class="sub">Sign in to manage vehicles and bookings.</div>
+    <div class="field"><label for="email">Email</label><input id="email" type="email" value="admin@rental.local"></div>
+    <div class="field"><label for="pw">Password</label><input id="pw" type="password" value="Admin@123"></div>
+    <a class="btn btn-primary" href="#dashboard">Login</a>
+  </div>
+</div>
+<div class="app-shell" id="shell" hidden>
+  <aside class="sidebar">
+    <div class="brand">FLEET MANAGER</div>
+    <a href="#dashboard" data-nav="dashboard">Dashboard</a>
+    <a href="#vehicles" data-nav="vehicles">Vehicles</a>
+    <a href="#customers" data-nav="customers">Customers</a>
+    <a href="#bookings" data-nav="bookings">Bookings</a>
+    <a href="#payments" data-nav="payments">Payments</a>
+    <a href="#maintenance" data-nav="maintenance">Maintenance</a>
+    <a href="#fuel" data-nav="fuel">Fuel Logs</a>
+    <a href="#reports" data-nav="reports">Reports</a>
+    <a href="#categories" data-nav="categories">Categories</a>
+    <a href="#users" data-nav="users">Users</a>
+    <div class="spacer"></div>
+    <a href="#login">Logout</a>
+  </aside>
+  <main class="main">
+    <div data-page="dashboard" hidden>
+    <div class="page-header">
+      <h1>Dashboard</h1>
+      
+    </div>
+    <div class="stat-grid">
+      <div class="card stat"><div class="label">Total Vehicles</div><div class="value">24</div></div>
+      <div class="card stat"><div class="label">Available</div><div class="value">15</div></div>
+      <div class="card stat"><div class="label">Rented</div><div class="value">6</div></div>
+      <div class="card stat"><div class="label">In Shop</div><div class="value">3</div></div>
+      <div class="card stat"><div class="label">Active Bookings</div><div class="value">6</div></div>
+      <div class="card stat"><div class="label">Overdue Returns</div><div class="value">1</div></div>
+    </div>
+    <div class="card">
+      <h2>Overdue Returns</h2>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Booking #</th><th>Vehicle</th><th>Customer</th><th>Phone</th><th>Due Date</th><th class="num">Days Overdue</th></tr></thead>
+          <tbody>
+            <tr><td>#1012</td><td>MH12 AB 4521</td><td>Ravi Kulkarni</td><td>98xxxxxx10</td><td>18-10-2026</td><td class="num">3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    <div data-page="vehicles" hidden>
+    <div class="page-header">
+      <h1>Vehicles</h1>
+      <a class="btn btn-primary" href="#new-booking">Add Vehicle</a>
+    </div>
+    <div class="tabs">
+      <a class="tab active" href="#vehicles" data-filter="All">All</a>
+      <a class="tab" href="#vehicles" data-filter="Available">Available</a>
+      <a class="tab" href="#vehicles" data-filter="Rented">Rented</a>
+      <a class="tab" href="#vehicles" data-filter="In Shop">In Shop</a>
+    </div>
+    <div class="vehicle-grid">
+      <div class="vehicle-card" data-status="Available">
+        <div class="vehicle-img"><span class="badge badge-success">Available</span>Hatchback</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">Swift LXi</div>
+          <div class="vehicle-sub">MH12 AB 4521</div>
+          <div class="spec-row"><span>42,000 km</span><span>Hatchback</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹1,500 <small>/ day</small></div><a href="#new-booking">View Details ↗</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card" data-status="Rented">
+        <div class="vehicle-img"><span class="badge badge-primary">Rented</span>Sedan</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">Honda City</div>
+          <div class="vehicle-sub">MH14 CD 7788</div>
+          <div class="spec-row"><span>31,000 km</span><span>Sedan</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹2,200 <small>/ day</small></div><a href="#new-booking">View Details ↗</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card" data-status="In Shop">
+        <div class="vehicle-img"><span class="badge badge-warning">In Shop</span>SUV</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">Creta SX</div>
+          <div class="vehicle-sub">MH12 EF 1203</div>
+          <div class="spec-row"><span>58,000 km</span><span>SUV</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹3,200 <small>/ day</small></div><a href="#new-booking">View Details ↗</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card" data-status="Available">
+        <div class="vehicle-img"><span class="badge badge-success">Available</span>Luxury</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">BMW 5 Series</div>
+          <div class="vehicle-sub">MH01 GH 9090</div>
+          <div class="spec-row"><span>12,000 km</span><span>Luxury</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹5,500 <small>/ day</small></div><a href="#new-booking">View Details ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div data-page="bookings" hidden>
+    <div class="page-header">
+      <h1>Bookings</h1>
+      <a class="btn btn-primary" href="#new-booking">New Booking</a>
+    </div>
+    <div class="filters">
+      <div class="field"><select><option>All statuses</option><option>Reserved</option><option>Active</option><option>Completed</option><option>Cancelled</option></select></div>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Booking #</th><th>Customer</th><th>Vehicle</th><th>Start</th><th>End</th><th class="num">Amount</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="bookRows">
+          <tr><td>#1012</td><td>Ravi Kulkarni</td><td>MH12 AB 4521</td><td>16-10-2026</td><td>18-10-2026</td><td class="num">₹3,000.00</td><td><span class="badge badge-primary">Active</span></td><td><a href="#new-booking">View ↗</a></td></tr>
+          <tr><td>#1013</td><td>Sneha Patil</td><td>MH14 CD 7788</td><td>22-10-2026</td><td>25-10-2026</td><td class="num">₹6,600.00</td><td><span class="badge badge-warning">Reserved</span></td><td><a href="#new-booking">View ↗</a></td></tr>
+          <tr><td>#1009</td><td>Amit Shah</td><td>MH01 GH 9090</td><td>05-10-2026</td><td>08-10-2026</td><td class="num">₹16,500.00</td><td><span class="badge badge-success">Completed</span></td><td><a href="#new-booking">View ↗</a></td></tr>
+          <tr><td>#1010</td><td>Neha Joshi</td><td>MH12 EF 1203</td><td>09-10-2026</td><td>10-10-2026</td><td class="num">₹3,200.00</td><td><span class="badge badge-neutral">Cancelled</span></td><td><a href="#new-booking">View ↗</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+    <div data-page="new-booking" hidden>
+    <div class="page-header"><h1>New Booking</h1></div>
+    <div class="card">
+      <div id="formMsg"></div>
+      <div class="form-grid">
+        <div class="field"><label for="cust">Customer</label><select id="cust"><option value="ravi">Ravi Kulkarni (licence valid till 2028)</option><option value="sneha">Sneha Patil (licence valid till 2027)</option><option value="neha">Neha Joshi (licence expires 01-11-2026)</option></select></div>
+        <div class="field"><label for="veh">Vehicle</label><select id="veh"><option value="MH12 AB 4521">MH12 AB 4521 — Swift LXi</option><option value="MH14 CD 7788">MH14 CD 7788 — Honda City</option><option value="MH12 EF 1203">MH12 EF 1203 — Creta SX (In Shop)</option><option value="MH01 GH 9090">MH01 GH 9090 — BMW 5 Series</option></select></div>
+        <div class="field"><label for="sd">Start date</label><input id="sd" type="date" value="2026-10-23"></div>
+        <div class="field"><label for="ed">End date</label><input id="ed" type="date" value="2026-10-26"><span class="hint">Return date must be after the start date.</span></div>
+      </div>
+      <div class="form-actions"><button class="btn btn-primary" id="save" type="button">Save</button><a class="btn" href="#bookings">Cancel</a></div>
+      <div class="note">Demo: these checks mimic the PostgreSQL rules (R1–R4). In the real app the database enforces them. Try Honda City on 23–24 Oct, Creta SX, Neha Joshi, or a start date before 21-10-2026.</div>
+    </div></div>
+    <div id="soon" hidden>
+      <div class="page-header"><h1 id="soonTitle"></h1></div>
+      <div class="card"><h2>Not part of this demo</h2><p>This page follows the same layout as the Vehicles and Bookings pages and is built by its owner (see the BUILD files).</p></div>
+    </div>
+  </main>
+</div>
+<script>
+var TODAY="2026-10-21",LAB={"dashboard":"Dashboard","vehicles":"Vehicles","customers":"Customers","bookings":"Bookings","payments":"Payments","maintenance":"Maintenance","fuel":"Fuel Logs","reports":"Reports","categories":"Categories","users":"Users"};
+var RATE={"MH12 AB 4521":1500,"MH14 CD 7788":2200,"MH12 EF 1203":3200,"MH01 GH 9090":5500};
+var STAT={"MH12 EF 1203":"In Shop"};
+var LIC={ravi:"2028-05-01",sneha:"2027-03-15",neha:"2026-11-01"};
+var NAME={ravi:"Ravi Kulkarni",sneha:"Sneha Patil",neha:"Neha Joshi"};
+var HELD=[{v:"MH12 AB 4521",s:"2026-10-16",e:"2026-10-18"},{v:"MH14 CD 7788",s:"2026-10-22",e:"2026-10-25"}];
+var next=1014;
+function $(i){return document.getElementById(i)}
+function fd(d){var p=d.split("-");return p[2]+"-"+p[1]+"-"+p[0]}
+function route(){
+  var r=(location.hash||"#login").slice(1),login=r==="login";
+  $("loginView").hidden=!login;$("shell").hidden=login;
+  if(login)return;
+  var pages=document.querySelectorAll("[data-page]"),found=false;
+  pages.forEach(function(p){var on=p.getAttribute("data-page")===r;p.hidden=!on;if(on)found=true});
+  $("soon").hidden=found;
+  if(!found){$("soonTitle").textContent=LAB[r]||"Not found"}
+  var hl=r==="new-booking"?"bookings":r;
+  document.querySelectorAll("[data-nav]").forEach(function(a){a.classList.toggle("active",a.getAttribute("data-nav")===hl)});
+}
+window.addEventListener("hashchange",route);route();
+document.querySelectorAll("[data-filter]").forEach(function(t){t.addEventListener("click",function(e){
+  e.preventDefault();var f=t.getAttribute("data-filter");
+  document.querySelectorAll("[data-filter]").forEach(function(x){x.classList.toggle("active",x===t)});
+  document.querySelectorAll("[data-status]").forEach(function(c){c.hidden=!(f==="All"||c.getAttribute("data-status")===f)});
+})});
+function msg(t,m){$("formMsg").innerHTML='<div class="alert alert-'+t+'">'+m+'</div>'}
+$("save").addEventListener("click",function(){
+  var v=$("veh").value,c=$("cust").value,s=$("sd").value,e=$("ed").value;
+  if(!s||!e)return msg("error","Invalid input");
+  if(e<=s)return msg("error","End date must be after the start date");
+  if(s<TODAY)return msg("error","Start date cannot be in the past");
+  if(STAT[v]==="In Shop")return msg("error","Vehicle is not available for booking");
+  if(LIC[c]<e)return msg("error","Customer licence expires before return date");
+  for(var i=0;i<HELD.length;i++){var h=HELD[i];if(h.v===v&&s<h.e&&h.s<e)return msg("error","Vehicle is already booked for these dates")}
+  var days=Math.round((Date.parse(e)-Date.parse(s))/864e5),amt=days*RATE[v];
+  HELD.push({v:v,s:s,e:e});
+  var tr=document.createElement("tr");
+  tr.innerHTML="<td>#"+(next++)+"</td><td>"+NAME[c]+"</td><td>"+v+"</td><td>"+fd(s)+"</td><td>"+fd(e)+'</td><td class="num">₹'+amt.toLocaleString("en-IN")+'.00</td><td><span class="badge badge-warning">Reserved</span></td><td><a href="#bookings">View ↗</a></td>';
+  $("bookRows").insertBefore(tr,$("bookRows").firstChild);
+  msg("success","Booking saved. Total amount ₹"+amt.toLocaleString("en-IN")+" ("+days+(days===1?" day":" days")+") was calculated by the database. See it in Bookings.");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vehicles — Fleet Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">FLEET MANAGER</div>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="vehicles.html" class="active">Vehicles</a>
+    <a href="customers.html">Customers</a>
+    <a href="bookings.html">Bookings</a>
+    <a href="payments.html">Payments</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="fuel.html">Fuel Logs</a>
+    <a href="reports.html">Reports</a>
+    <a href="categories.html">Categories</a>
+    <a href="users.html">Users</a>
+    <div class="spacer"></div>
+    <a href="login.html">Logout</a>
+  </aside>
+  <main class="main">
+    <div class="page-header">
+      <h1>Vehicles</h1>
+      <a class="btn btn-primary" href="form.html">Add Vehicle</a>
+    </div>
+    <div class="tabs">
+      <a class="tab active" href="vehicles.html">All</a>
+      <a class="tab" href="vehicles.html">Available</a>
+      <a class="tab" href="vehicles.html">Rented</a>
+      <a class="tab" href="vehicles.html">In Shop</a>
+    </div>
+    <div class="vehicle-grid">
+      <div class="vehicle-card">
+        <div class="vehicle-img"><span class="badge badge-success">Available</span>Hatchback</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">Swift LXi</div>
+          <div class="vehicle-sub">MH12 AB 4521</div>
+          <div class="spec-row"><span>42,000 km</span><span>Hatchback</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹1,500 <small>/ day</small></div><a href="form.html">View Details ↗</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-img"><span class="badge badge-primary">Rented</span>Sedan</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">Honda City</div>
+          <div class="vehicle-sub">MH14 CD 7788</div>
+          <div class="spec-row"><span>31,000 km</span><span>Sedan</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹2,200 <small>/ day</small></div><a href="form.html">View Details ↗</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-img"><span class="badge badge-warning">In Shop</span>SUV</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">Creta SX</div>
+          <div class="vehicle-sub">MH12 EF 1203</div>
+          <div class="spec-row"><span>58,000 km</span><span>SUV</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹3,200 <small>/ day</small></div><a href="form.html">View Details ↗</a></div>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <div class="vehicle-img"><span class="badge badge-success">Available</span>Luxury</div>
+        <div class="vehicle-body">
+          <div class="vehicle-title">BMW 5 Series</div>
+          <div class="vehicle-sub">MH01 GH 9090</div>
+          <div class="spec-row"><span>12,000 km</span><span>Luxury</span><span>2023</span></div>
+          <div class="vehicle-foot"><div class="price">₹5,500 <small>/ day</small></div><a href="form.html">View Details ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
