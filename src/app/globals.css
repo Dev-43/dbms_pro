@@ -1,0 +1,125 @@
+/* ===== Fleet Manager — base theme (reference: BoxCars look). FROZEN: edit only via DESIGN.md ===== */
+:root {
+  --bg: #f5f7fc;
+  --surface: #ffffff;
+  --border: #e6e9f2;
+  --text: #050b20;
+  --muted: #5e6a85;
+  --primary: #405ff2;
+  --primary-hover: #2f49c9;
+  --primary-soft: #e9edff;
+  --dark: #0f1b3d;
+  --success: #1f8a4c;
+  --success-soft: #e2f5ea;
+  --warning: #b86a08;
+  --warning-soft: #fdf0d9;
+  --danger: #c0392b;
+  --danger-soft: #fce8e5;
+  --neutral-soft: #eef0f6;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 999px;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+  --font: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --sidebar-w: 230px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1 { font-size: 26px; font-weight: 700; margin: 0; }
+h2 { font-size: 18px; font-weight: 700; margin: 0 0 var(--s3); }
+
+/* Layout */
+.app-shell { display: flex; min-height: 100vh; }
+.sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); padding: var(--s5) var(--s4); display: flex; flex-direction: column; gap: var(--s1); }
+.sidebar .brand { font-weight: 700; font-size: 17px; letter-spacing: .06em; color: var(--text); margin-bottom: var(--s5); padding: 0 var(--s3); }
+.sidebar a { display: block; padding: var(--s3); border-radius: var(--radius-sm); color: var(--muted); font-weight: 500; }
+.sidebar a:hover { background: var(--neutral-soft); color: var(--text); text-decoration: none; }
+.sidebar a.active { background: var(--primary-soft); color: var(--primary); font-weight: 700; }
+.sidebar .spacer { flex: 1; }
+.main { flex: 1; padding: var(--s6); max-width: 1240px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s5); }
+
+/* Card */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--s5); margin-bottom: var(--s5); }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--s4); margin-bottom: var(--s5); }
+.stat-grid .card { margin-bottom: 0; }
+.stat .label { color: var(--muted); font-size: 13px; }
+.stat .value { font-size: 30px; font-weight: 700; }
+
+/* Buttons (pill, like the reference search button) */
+.btn { display: inline-block; padding: 10px var(--s5); border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+.btn:hover { background: var(--neutral-soft); text-decoration: none; }
+.btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-danger:hover { background: #a22e22; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Tabs (like "In Stock / New Cars / Used Cars") */
+.tabs { display: flex; gap: var(--s5); border-bottom: 1px solid var(--border); margin-bottom: var(--s5); }
+.tab { padding: var(--s2) 0 var(--s3); color: var(--muted); font-weight: 600; border-bottom: 2px solid transparent; }
+.tab:hover { color: var(--text); text-decoration: none; }
+.tab.active { color: var(--text); border-bottom-color: var(--primary); }
+
+/* Table */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 12px; font-weight: 700; color: var(--muted); background: var(--bg); padding: var(--s3) var(--s4); border-bottom: 1px solid var(--border); }
+.table td { padding: var(--s3) var(--s4); border-bottom: 1px solid var(--border); }
+.table tr:last-child td { border-bottom: none; }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.empty { text-align: center; color: var(--muted); padding: var(--s5); }
+
+/* Vehicle cards (like "Explore All Vehicles") */
+.vehicle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--s5); }
+.vehicle-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.vehicle-img { position: relative; height: 140px; background: linear-gradient(135deg, #cfd8f6, #a9b8ee); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 18px; }
+.vehicle-img .badge { position: absolute; top: var(--s3); left: var(--s3); }
+.vehicle-body { padding: var(--s4); }
+.vehicle-title { font-weight: 700; font-size: 15px; }
+.vehicle-sub { color: var(--muted); font-size: 12px; margin-bottom: var(--s3); }
+.spec-row { display: flex; justify-content: space-between; gap: var(--s2); padding: var(--s3) 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+.vehicle-foot { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s3); }
+.price { font-size: 17px; font-weight: 700; }
+.price small { color: var(--muted); font-weight: 500; font-size: 12px; }
+
+/* Forms */
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
+.field { display: flex; flex-direction: column; gap: var(--s1); }
+.field label { font-weight: 600; font-size: 13px; }
+.field input, .field select, .field textarea { font: inherit; padding: 10px var(--s4); border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 3px solid var(--primary-soft); border-color: var(--primary); }
+.field .hint { color: var(--muted); font-size: 12px; }
+.form-actions { display: flex; gap: var(--s3); margin-top: var(--s5); }
+.filters { display: flex; gap: var(--s3); margin-bottom: var(--s4); flex-wrap: wrap; }
+
+/* Alerts */
+.alert { padding: var(--s3) var(--s4); border-radius: var(--radius-sm); margin-bottom: var(--s4); border: 1px solid; }
+.alert-error { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+.alert-success { background: var(--success-soft); border-color: var(--success); color: var(--success); }
+
+/* Status badges */
+.badge { display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; }
+.badge-success { background: var(--success-soft); color: var(--success); }
+.badge-primary { background: var(--primary-soft); color: var(--primary); }
+.badge-warning { background: var(--warning-soft); color: var(--warning); }
+.badge-danger  { background: var(--danger-soft);  color: var(--danger); }
+.badge-neutral { background: var(--neutral-soft); color: var(--muted); }
+
+/* Login (dark hero-style backdrop like the reference header) */
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, #0f1b3d 0%, #27407f 55%, #405ff2 100%); }
+.login-card { width: 380px; border-radius: 20px; padding: var(--s6); }
+.login-card .brand { font-weight: 700; letter-spacing: .06em; margin-bottom: var(--s2); }
+.login-card .sub { color: var(--muted); margin-bottom: var(--s5); }
+.login-card .field + .field { margin-top: var(--s3); }
+.login-card .btn { display: block; width: 100%; text-align: center; margin-top: var(--s4); }
+
+@media (max-width: 800px) {
+  .app-shell { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .main { padding: var(--s4); }
+  .form-grid { grid-template-columns: 1fr; }
+}
