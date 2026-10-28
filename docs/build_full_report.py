@@ -875,30 +875,32 @@ def create_report():
     )
 
     screens = [
-        ("Login Interface (`ui-kit/login.html`)", "Staff login interface with email/password authentication and role credential validation."),
-        ("Executive Dashboard (`ui-kit/dashboard.html`)", "Real-time fleet KPI metrics, monthly revenue trend, available vehicles list, and overdue return alerts."),
-        ("Vehicle Fleet Management (`ui-kit/vehicles.html`)", "Tabular fleet directory with category filters, status badges (Available, Rented, In Shop), and detail view links."),
-        ("Reservation & Bookings Hub (`ui-kit/bookings.html`)", "Booking management screen showing active/completed rentals, calculated charges, and lifecycle transition triggers."),
-        ("New Booking & Customer Form (`ui-kit/form.html`)", "Modal dialog for customer onboarding and new reservation checkout with live rate calculation.")
+        ("Login Interface", "Staff login interface with email/password authentication and role credential validation.", "d:/DBMS_MINI/dbms_pro_forked/docs/screenshot_login.png"),
+        ("Executive Dashboard", "Real-time fleet KPI metrics, monthly revenue trend, available vehicles list, and overdue return alerts.", "d:/DBMS_MINI/dbms_pro_forked/docs/screenshot_dashboard.png"),
+        ("Vehicle Fleet Management", "Tabular fleet directory with category filters, status badges (Available, Rented, In Shop), and detail view links.", "d:/DBMS_MINI/dbms_pro_forked/docs/screenshot_vehicles.png"),
+        ("Reservation & Bookings Hub", "Booking management screen showing active/completed rentals, calculated charges, and lifecycle transition triggers.", "d:/DBMS_MINI/dbms_pro_forked/docs/screenshot_bookings.png"),
+        ("New Booking & Customer Form", "Modal dialog for customer onboarding and new reservation checkout with live rate calculation.", "d:/DBMS_MINI/dbms_pro_forked/docs/screenshot_form.png")
     ]
 
-    for title, desc in screens:
+    for title, desc, img_path in screens:
         add_h3(title)
         add_p(desc, italic=True)
-        # Placeholder frame table
-        p_frame = doc.add_table(rows=1, cols=1)
-        p_frame.alignment = WD_TABLE_ALIGNMENT.CENTER
-        c = p_frame.cell(0, 0)
-        c.width = Inches(5.8)
-        set_cell_shading(c, "F1F5F9")
-        set_cell_margins(c, top=400, bottom=400, left=300, right=300)
-        cp = c.paragraphs[0]
-        cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        c_run = cp.add_run(f"\n[ SCREENSHOT PLACEHOLDER: Insert image of {title} here ]\n(Open {title.split('(')[-1].replace(')', '')} in browser, capture screenshot, and paste here)\n")
-        c_run.font.name = 'Times New Roman'
-        c_run.font.size = Pt(10)
-        c_run.italic = True
-        c_run.font.color.rgb = RGBColor(100, 116, 139)
+        if os.path.exists(img_path):
+            add_img(img_path, width=Inches(6.0), caption=title)
+        else:
+            # Placeholder frame table fallback
+            p_frame = doc.add_table(rows=1, cols=1)
+            p_frame.alignment = WD_TABLE_ALIGNMENT.CENTER
+            c = p_frame.cell(0, 0)
+            c.width = Inches(5.8)
+            set_cell_shading(c, "F1F5F9")
+            set_cell_margins(c, top=400, bottom=400, left=300, right=300)
+            cp = c.paragraphs[0]
+            cp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            c_run = cp.add_run(f"\n[ SCREENSHOT: {title} ]\n")
+            c_run.font.name = 'Times New Roman'
+            c_run.font.size = Pt(10)
+            c_run.italic = True
         add_p("", space_after=6)
 
     doc.add_page_break()
